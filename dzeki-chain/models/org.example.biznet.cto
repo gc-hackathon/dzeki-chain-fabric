@@ -1,19 +1,50 @@
 /**
- * Write your model definitions here
+ * Dog trading network
  */
+namespace org.acme.mynetwork
 
-namespace org.example.biznet
-
-participant User identified by email {
-  o String email
+asset Dog identified by dogId {
+	o String dogId
+    o Double tradePrice
+    o Double matePrice
+    o Boolean canBeSold
+    o String breed
+    o String gender
+    o String info
+    --> Dog father optional
+    --> Dog mother optional
+    --> BreedingHouse owner
 }
 
-asset SampleAsset identified by assetId {
-  o String assetId
-  o String value
+participant BreedingHouse identified by breedingId {
+	o String breedingId
+    o String name
+    o String address
+    o Double money
 }
 
-transaction ChangeAssetValue {
-  o String newValue
-  --> Asset relatedAsset
+abstract transaction Negotiation {
+    --> Dog wantedDog
+    --> Dog offeredDog optional
+  	o Double price optional
+    --> BreedingHouse oldOwnerOffered optional
+    --> BreedingHouse oldOwnerWanted optional
+    o String state
+}
+
+/*
+3 types of dog trade:
+- Dog for money
+- Dog for dog
+- Dog for dog + money
+*/
+transaction DogTrade extends Negotiation {
+
+}
+
+/*
+Mate dog for money or for puppy
+*/
+transaction DogMate extends Negotiation {
+	o Boolean mateForMoney
 }
