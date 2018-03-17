@@ -1,4 +1,4 @@
-    /*
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -31,10 +31,8 @@ function dogBuying(buyDog) {
     }
     
     var dogPrice = buyDog.dog.price;
+    dogPrice = checkDiscountBuy(buyDog, dogPrice);
     
-    if (buyDog.discount != null && buyDog.discount.amount <= dogPrice) {
-        dogPrice -= buyDog.discount.amount;
-    }
     if (dogPrice > buyDog.buyer.balance) {
       throw new Error('Insufficient funds!');
     }
@@ -63,6 +61,87 @@ function dogBuying(buyDog) {
             return participantRegistry.update(buyDog.buyer);
         });
   }
+  
+  /**
+   * Buy mating with dog.
+   * @transaction
+   * @param {org.acme.mynetwork.MatingRequest} matingRequest - The MatingRequest instance.
+   */
+  function requestMating(matingRequest) {
+    
+    var chosenDog = matingRequest.chosenDog;
+    var ownedDog = matingRequest.ownedDog;
+    
+    if (chosenDog.gender == ownedDog.gender) {
+        throw new Error('Sorry, no gay dogs allowed.');
+    }
+    
+    if (matingRequest.money == true) {
+      var matePrice = chosenDog.price;
+        if (chosenDog.gender == 'male') {
+            matePrice = checkDiscountMate(matingRequest, matePrice);
+            matingRequest.chosenDog.owner.balance += matePrice;
+          matingRequest.ownedDog.owner.balance -= matePrice;
+      } else {
+          matePrice = ownedDog.price;
+          matePrice = checkDiscountMate(matingRequest, matePrice);
+            matingRequest.chosenDog.owner.balance -= matePrice;
+          matingRequest.ownedDog.owner.balance += matePrice;
+      }
+    }
+    
+    return getParticipantRegistry('org.acme.mynetwork.BreedingHouse')
+        .then(function (participantRegistry) {
+            return participantRegistry.update(matingRequest.ownedDog.owner);
+        })
+        .then(function () {
+            return getParticipantRegistry('org.acme.mynetwork.BreedingHouse');
+        })
+        .then(function (participantRegistry) {
+            return participantRegistry.update(matingRequest.chosenDog.owner);
+        });
+    
+  }
+  
+  var checkDiscountBuy = function(buyDog, dogPrice) {
+    if (buyDog.discount != null) {
+      var discountAmount = buyDog.discount.amount;
+      var discountBuyer = buyDog.discount.buyer;
+      var discountSeller = buyDog.discount.seller;
+      
+      if (buyDog.buyer == discountBuyer || buyDog.buyer == discountSeller) {
+        if (buyDog.seller == discountBuyer || buyDog.seller == discountSeller) {
+          if (discountAmount <= dogPrice) {
+            dogPrice -= discountAmount;
+          }
+        }
+      }
+    }
+    
+    return dogPrice;
+  }
+  
+  var checkDiscountMate = function(matingRequest, matePrice) {
+    if (matingRequest.discount != null) {
+      var buyer = matingRequest.ownedDog.owner;
+      var seller = matingRequest.chosenDog.owner;
+      var discountBuyer = matingRequest.discount.buyer;
+      var discountSeller = matingRequest.discount.seller;
+      var discountAmount = matingRequest.discount.amount;
+      
+      if (buyer == discountBuyer || buyer == discountSeller) {
+        if (seller == discountBuyer || seller == discountSeller) {
+          if (discountAmount <= matePrice) {
+            matePrice -= discountAmount;
+          }
+        }
+      }
+    }
+    
+    return matePrice;
+  }
+  
+  
   
   /**
    * Swap dogs from one house to another.
@@ -101,3 +180,4 @@ function dogBuying(buyDog) {
         });
     
   }
+  

@@ -27,6 +27,8 @@ participant BreedingHouse identified by breedingHouseId {
 	o String breedingHouseId
     o String name
     o String address
+    o String phone
+    o String email
     o Double balance
 }
 
@@ -34,6 +36,13 @@ transaction BuyDog {
     --> Dog dog
     --> BreedingHouse buyer
     --> BreedingHouse seller
+    --> Discount discount optional
+}
+
+transaction MatingRequest {
+	--> Dog chosenDog
+    --> Dog ownedDog
+    o Boolean money
     --> Discount discount optional
 }
 
