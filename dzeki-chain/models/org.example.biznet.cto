@@ -5,46 +5,44 @@ namespace org.acme.mynetwork
 
 asset Dog identified by dogId {
 	o String dogId
-    o Double tradePrice
-    o Double matePrice
-    o Boolean canBeSold
+    o String name
+    o Double price
     o String breed
     o String gender
     o String info
+    o Boolean forSale
     --> Dog father optional
     --> Dog mother optional
     --> BreedingHouse owner
 }
 
-participant BreedingHouse identified by breedingId {
-	o String breedingId
+asset Discount identified by discountId {
+  	o String discountId
+	--> BreedingHouse buyer
+    --> BreedingHouse seller
+    o Double amount
+}
+
+participant BreedingHouse identified by breedingHouseId {
+	o String breedingHouseId
     o String name
     o String address
-    o Double money
+    o Double balance
 }
 
-abstract transaction Negotiation {
-    --> Dog wantedDog
-    --> Dog offeredDog optional
-  	o Double price optional
-    --> BreedingHouse oldOwnerOffered optional
-    --> BreedingHouse oldOwnerWanted optional
-    o String state
+transaction BuyDog {
+    --> Dog dog
+    --> BreedingHouse buyer
+    --> BreedingHouse seller
+    --> Discount discount optional
 }
 
-/*
-3 types of dog trade:
-- Dog for money
-- Dog for dog
-- Dog for dog + money
-*/
-transaction DogTrade extends Negotiation {
-
+transaction SwapOwners {
+	--> Dog dog1
+    --> Dog dog2
 }
 
-/*
-Mate dog for money or for puppy
-*/
-transaction DogMate extends Negotiation {
-	o Boolean mateForMoney
+transaction UpdateDog {
+  --> Dog dog
+  o Boolean forSale
 }
