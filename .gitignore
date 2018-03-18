@@ -1,1 +1,8 @@
 # logs
+/composer-logs
+
+# bna
+*.bna
+
+# cards
+*.card
