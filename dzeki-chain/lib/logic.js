@@ -180,4 +180,235 @@ function dogBuying(buyDog) {
         });
     
   }
-  
+
+
+  /**
+   * Add breeding houses
+   * @transaction
+   * @param {org.acme.mynetwork.SetupBreedingHouses} setupBreedingHouses
+   */
+  function setupBreedingHouses() {
+    
+    var factory = getFactory();
+    var NS = 'org.acme.mynetwork';
+
+    // Create Breeding Houses
+    var bh1 = factory.newResource(NS, 'BreedingHouse', 'BH_1');
+    bh1.name = 'Daniel Elero BH';
+    bh1.address = 'StartIT 1, Novi Sad, Serbia';
+    bh1.phone = '421492';
+    bh1.email = 'debh@bh.com';
+    bh1.balance = 65000
+    
+    var bh2 = factory.newResource(NS, 'BreedingHouse', 'BH_2');
+    bh2.name = 'Milan Sovic BH';
+    bh2.address = 'StartIT 2, Novi Sad, Serbia';
+    bh2.phone = '98989986';
+    bh2.email = 'msbh@bh.com';
+    bh2.balance = 53200
+
+    var bh3 = factory.newResource(NS, 'BreedingHouse', 'BH_3');
+    bh3.name = 'Aleksandar Andjelkovic BH';
+    bh3.address = 'StartIT 3, Novi Sad, Serbia';
+    bh3.phone = '292929292';
+    bh3.email = 'aabh@bh.com';
+    bh3.balance = 200
+
+    var bh4 = factory.newResource(NS, 'BreedingHouse', 'BH_4');
+    bh4.name = 'Aleksandar Okiljevic BH';
+    bh4.address = 'StartIT 4, Novi Sad, Serbia';
+    bh4.phone = '12121241';
+    bh4.email = 'aobh@bh.com';
+    bh4.balance = 10
+
+    // Save
+    return getParticipantRegistry(NS + '.BreedingHouse')
+        .then(function(breedingHouseRegistry) {
+            return breedingHouseRegistry.addAll([bh1, bh2, bh3, bh4]);
+        });
+  }
+
+
+  /**
+   * Create dogs
+   * @transaction
+   * @param {org.acme.mynetwork.SetupDogs} setupDogs
+   */
+  function setupDogs() {
+    
+    var factory = getFactory();
+    var NS = 'org.acme.mynetwork';
+
+    // Create Dogs
+    var dog1 = factory.newResource(NS, 'Dog', 'D_1');
+    dog1.name = "Dzeki";
+    dog1.price = 0;
+    dog1.breed = "Mixed";
+    dog1.gender = "male";
+    dog1.info = "Dzeki is the CEO of Dzeki-Chain platform. He is not interested. . .";
+    dog1.forSale = false;
+    dog1.forMate = false;
+    dog1.photoUrl = "";
+    dog1.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_1');
+
+    var dog2 = factory.newResource(NS, 'Dog', 'D_2');
+    dog2.name = "Charlie";
+    dog2.price = 500;
+    dog2.breed = "Zlatni Retriver";
+    dog2.gender = "male";
+    dog2.info = "Charlie made 32 puppies!";
+    dog2.forSale = false;
+    dog2.forMate = true;
+    dog2.photoUrl = "";
+    dog2.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_3');
+
+    var dog3 = factory.newResource(NS, 'Dog', 'D_3');
+    dog3.name = "Cooper";
+    dog3.price = 800;
+    dog3.breed = "Haski";
+    dog3.gender = "male";
+    dog3.info = "Cooper is the fastest dog on platform";
+    dog3.forSale = true;
+    dog3.forMate = false;
+    dog3.photoUrl = "";
+    dog3.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_2');
+
+
+    var dog4 = factory.newResource(NS, 'Dog', 'D_4');
+    dog4.name = "Max";
+    dog4.price = 0;
+    dog4.breed = "Haski";
+    dog4.gender = "male";
+    dog4.info = "Max is not for sale and not in the mood";
+    dog4.forSale = false;
+    dog4.forMate = false;
+    dog4.photoUrl = "";
+    dog4.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_2');
+
+
+    var dog5 = factory.newResource(NS, 'Dog', 'D_5');
+    dog5.name = "Bella";
+    dog5.price = 500;
+    dog5.breed = "Zlatni Retriver";
+    dog5.gender = "female";
+    dog5.info = "Mia bella. . . . ";
+    dog5.forSale = false;
+    dog5.forMate = true;
+    dog5.photoUrl = "";
+    dog5.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_4');
+
+    var dog6 = factory.newResource(NS, 'Dog', 'D_6');
+    dog6.name = "Lucy";
+    dog6.price = 200;
+    dog6.breed = "Haski";
+    dog6.gender = "female";
+    dog6.info = "Lucika je dresirana";
+    dog6.forSale = true;
+    dog6.forMate = false;
+    dog6.photoUrl = "";
+    dog6.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_3');
+
+    var dog7 = factory.newResource(NS, 'Dog', 'D_7');
+    dog7.name = "Luna";
+    dog7.price = 10000;
+    dog7.breed = "Maltezer";
+    dog7.gender = "female";
+    dog7.info = "Luna je najskuplja na platformi";
+    dog7.forSale = true;
+    dog7.forMate = false;
+    dog7.photoUrl = "";
+    dog7.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_3');
+    dog7.father = factory.newRelationship(NS, 'Dog', 'D_10');
+    dog7.mother = factory.newRelationship(NS, 'Dog', 'D_9');
+
+    var dog8 = factory.newResource(NS, 'Dog', 'D_8');
+    dog8.name = "Molly";
+    dog8.price = 350;
+    dog8.breed = "Zlatni Retreiver";
+    dog8.gender = "female";
+    dog8.info = "Aw aw aw aw";
+    dog8.forSale = true;
+    dog8.forMate = true;
+    dog8.photoUrl = "";
+    dog8.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_4');
+    dog8.father =  factory.newRelationship(NS, 'Dog', 'D_2');
+    dog8.mother =  factory.newRelationship(NS, 'Dog', 'D_5');
+
+    var dog9 = factory.newResource(NS, 'Dog', 'D_9');
+    dog9.name = "Maggie";
+    dog9.price = 220;
+    dog9.breed = "Maltezer";
+    dog9.gender = "female";
+    dog9.info = "Maggie from the Simpsons";
+    dog9.forSale = true;
+    dog9.forMate = true;
+    dog9.photoUrl = "";
+    dog9.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_4');
+
+    var dog10 = factory.newResource(NS, 'Dog', 'D_10');
+    dog10.name = "Svrca";
+    dog10.price = 3200;
+    dog10.breed = "Maltezer";
+    dog10.gender = "male";
+    dog10.info = "Svrcaaaaa";
+    dog10.forSale = false;
+    dog10.forMate = true;
+    dog10.photoUrl = "";
+    dog10.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_1');
+
+    var dog11 = factory.newResource(NS, 'Dog', 'D_11');
+    dog11.name = "Dzek";
+    dog11.price = 1220;
+    dog11.breed = "Maltezer";
+    dog11.gender = "male";
+    dog11.info = "Svrcaaaaa";
+    dog11.forSale = false;
+    dog11.forMate = true;
+    dog11.photoUrl = "";
+    dog11.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_1');
+    dog11.father = factory.newRelationship(NS, 'Dog', 'D_2');
+    dog11.mother =  factory.newRelationship(NS, 'Dog', 'D_5');
+
+    var dog12 = factory.newResource(NS, 'Dog', 'D_12');
+    dog12.name = "Violina";
+    dog12.price = 2450;
+    dog12.breed = "Maltezer";
+    dog12.gender = "female";
+    dog12.info = "Bla bla bla bla bla";
+    dog12.forSale = false;
+    dog12.forMate = true;
+    dog12.photoUrl = "";
+    dog12.owner = factory.newRelationship(NS, 'BreedingHouse', 'BH_1');
+    dog12.father = factory.newRelationship(NS, 'Dog', 'D_11');
+    dog12.mother = factory.newRelationship(NS, 'Dog', 'D_7');
+    
+   	return getAssetRegistry(NS + '.Dog')
+      .then(function(dogRegistry){
+        return dogRegistry.addAll([dog1]);  
+      });
+  }
+
+
+  /**
+   * Change dog for sale field.
+   * @transaction
+   * @param {org.acme.mynetwork.SetupDiscounts} setupDiscounts
+   */
+  function setupDiscounts() {
+    var factory = getFactory();
+    var NS = 'org.acme.mynetwork';
+    
+    var disc1 = factory.newResource(NS, 'Discount', 'DISC_1');
+    
+    disc1.buyer = factory.newRelationship(NS, 'BreedingHouse', 'BH_1');
+    disc1.seller = factory.newRelationship(NS, 'BreedingHouse', 'BH_2');
+    disc1.amount = 10;
+    
+    // Save
+    return getAssetRegistry(NS + '.Discount')
+      .then(function(discountRegistry) {      	
+        return discountRegistry.addAll([disc1]);
+      });
+  }
+
+

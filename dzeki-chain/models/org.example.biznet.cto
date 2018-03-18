@@ -11,6 +11,8 @@ asset Dog identified by dogId {
     o String gender
     o String info
     o Boolean forSale
+    o Boolean forMate
+    o String photoUrl optional
     --> Dog father optional
     --> Dog mother optional
     --> BreedingHouse owner
@@ -55,3 +57,7 @@ transaction UpdateDog {
   --> Dog dog
   o Boolean forSale
 }
+
+transaction SetupBreedingHouses {}
+transaction SetupDogs {}
+transaction SetupDiscounts {}
