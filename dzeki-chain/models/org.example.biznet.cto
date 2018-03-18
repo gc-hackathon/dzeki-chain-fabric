@@ -7,12 +7,13 @@ asset Dog identified by dogId {
 	o String dogId
     o String name
     o Double price
+    o Double matePrice
     o String breed
     o String gender
     o String info
     o Boolean forSale
     o Boolean forMate
-    o String photoUrl optional
+	o String photoUrl optional
     --> Dog father optional
     --> Dog mother optional
     --> BreedingHouse owner
@@ -56,6 +57,11 @@ transaction SwapOwners {
 transaction UpdateDog {
   --> Dog dog
   o Boolean forSale
+}
+
+transaction UpdateDogMate {
+ --> Dog dog
+ o Boolean forMate
 }
 
 transaction SetupBreedingHouses {}
